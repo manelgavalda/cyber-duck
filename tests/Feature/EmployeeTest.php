@@ -110,4 +110,32 @@ class EmployeeTest extends TestCase
                 'manelgavalda1@gmail.com'
             ]);
     }
+
+    /** @test */
+    public function the_employee_update_form_is_correctly_shown()
+    {
+        $employee = factory('App\Employee')->create([
+            'first_name' => 'Manel',
+            'last_name' => 'Gavaldà',
+            'email' => 'manelgavalda1@gmail.com'
+        ]);
+
+        $response = $this->get("/employees/{$employee->id}/edit");
+
+        $response->assertStatus(200)
+            ->assertSeeInOrder([
+                'Manel',
+                'Gavaldà',
+                'manelgavalda1@gmail.com'
+            ]);
+    }
+
+    /** @test */
+    public function the_employee_creation_form_is_correctly_shown()
+    {
+        $response = $this->get("/employees/create");
+
+        $response->assertStatus(200)
+            ->assertSee('Create Employee');
+    }
 }

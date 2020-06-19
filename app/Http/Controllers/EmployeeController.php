@@ -19,12 +19,10 @@ class EmployeeController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        return view('employees.create');
     }
 
     /**
@@ -47,21 +45,16 @@ class EmployeeController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
      */
     public function edit(Employee $employee)
     {
-        //
+        return view('employees.edit', [
+            'employee' => $employee
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Employee $employee)
     {

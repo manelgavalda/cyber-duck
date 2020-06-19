@@ -103,4 +103,30 @@ class CompanyTest extends TestCase
                 'cyberduck@gmail.com',
             ]);
     }
+
+    /** @test */
+    public function the_company_update_form_is_correctly_shown()
+    {
+        $company = factory('App\Company')->create([
+            'name' => 'Cyber-Duck',
+            'email' => 'cyberduck@gmail.com'
+        ]);
+
+        $response = $this->get("/companies/{$company->id}/edit");
+
+        $response->assertStatus(200)
+            ->assertSeeInOrder([
+                'Cyber-Duck',
+                'cyberduck@gmail.com'
+            ]);
+    }
+
+    /** @test */
+    public function the_company_creation_form_is_correctly_shown()
+    {
+        $response = $this->get("/companies/create");
+
+        $response->assertStatus(200)
+            ->assertSee('Create Company');
+    }
 }

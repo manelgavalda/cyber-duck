@@ -19,12 +19,10 @@ class CompanyController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        return view('companies.create');
     }
 
     /**
@@ -47,13 +45,12 @@ class CompanyController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Company  $company
-     * @return \Illuminate\Http\Response
      */
     public function edit(Company $company)
     {
-        //
+        return view('companies.edit', [
+            'company' => $company
+        ]);
     }
 
     /**
