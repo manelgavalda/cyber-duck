@@ -37227,6 +37227,7 @@ module.exports = function(module) {
 				return module.i;
 			}
 		});
+
 		module.webpackPolyfill = 1;
 	}
 	return module;

@@ -11,10 +11,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        factory('App\User')->create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('password')
         ]);
+
+        factory('App\Employee', 5)->create();
+        factory('App\Company', 5)->create();
     }
 }
