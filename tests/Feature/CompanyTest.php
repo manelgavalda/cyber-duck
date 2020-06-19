@@ -29,4 +29,16 @@ class CompanyTest extends TestCase
                 'cyberduck.co.uk'
             ]);
     }
+
+    /** @test */
+    public function it_only_shows_10_companies_per_page()
+    {
+        $companies = factory('App\Company', 11)->create();
+
+        $response = $this->get('/companies');
+
+        $response->assertStatus(200)
+            ->assertSee($companies->get(9)->email)
+            ->assertDontSee($companies->last()->email);
+    }
 }

@@ -31,4 +31,16 @@ class EmployeeTest extends TestCase
                 '699112233',
             ]);
     }
+
+    /** @test */
+    public function it_only_shows_10_employees_per_page()
+    {
+        $employees = factory('App\Employee', 11)->create();
+
+        $response = $this->get('/employees');
+
+        $response->assertStatus(200)
+            ->assertSee($employees->get(9)->email)
+            ->assertDontSee($employees->last()->email);
+    }
 }
