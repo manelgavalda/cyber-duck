@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">Companies</h3>
         </div>
-        <!-- /.card-header -->
+
         <div class="card-body">
             <table class="table table-bordered">
                 <thead>
@@ -28,7 +28,7 @@
                 </tbody>
             </table>
         </div>
-        <!-- /.card-body -->
+
         <div class="card-footer clearfix">
             {{ $companies->links() }}
         </div>

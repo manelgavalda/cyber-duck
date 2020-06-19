@@ -19,9 +19,8 @@ class CompanyTest extends TestCase
             'website' => 'cyberduck.co.uk'
         ]);
 
-        $response = $this->get('/companies');
-
-        $response->assertStatus(200)
+        $this->get('/companies')
+            ->assertStatus(200)
             ->assertSeeInOrder([
                 1,
                 'Cyber-Duck',
@@ -35,9 +34,8 @@ class CompanyTest extends TestCase
     {
         $companies = factory('App\Company', 11)->create();
 
-        $response = $this->get('/companies');
-
-        $response->assertStatus(200)
+        $this->get('/companies')
+            ->assertStatus(200)
             ->assertSee($companies->get(9)->email)
             ->assertDontSee($companies->last()->email);
     }
@@ -95,9 +93,8 @@ class CompanyTest extends TestCase
             'email' => 'cyberduck@gmail.com',
         ]);
 
-        $response = $this->get("/companies/{$company->id}");
-
-        $response->assertStatus(200)
+        $this->get("/companies/{$company->id}")
+            ->assertStatus(200)
             ->assertSeeInOrder([
                 'Cyber-Duck',
                 'cyberduck@gmail.com',
@@ -112,9 +109,8 @@ class CompanyTest extends TestCase
             'email' => 'cyberduck@gmail.com'
         ]);
 
-        $response = $this->get("/companies/{$company->id}/edit");
-
-        $response->assertStatus(200)
+        $this->get("/companies/{$company->id}/edit")
+            ->assertStatus(200)
             ->assertSeeInOrder([
                 'Cyber-Duck',
                 'cyberduck@gmail.com'
@@ -124,9 +120,8 @@ class CompanyTest extends TestCase
     /** @test */
     public function the_company_creation_form_is_correctly_shown()
     {
-        $response = $this->get("/companies/create");
-
-        $response->assertStatus(200)
+        $this->get("/companies/create")
+            ->assertStatus(200)
             ->assertSee('Create Company');
     }
 }

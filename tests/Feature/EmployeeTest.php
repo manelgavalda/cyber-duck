@@ -20,9 +20,8 @@ class EmployeeTest extends TestCase
             'phone' => '699112233'
         ]);
 
-        $response = $this->get('/employees');
-
-        $response->assertStatus(200)
+        $this->get('/employees')
+            ->assertStatus(200)
             ->assertSeeInOrder([
                 1,
                 'Manel',
@@ -37,9 +36,8 @@ class EmployeeTest extends TestCase
     {
         $employees = factory('App\Employee', 11)->create();
 
-        $response = $this->get('/employees');
-
-        $response->assertStatus(200)
+        $this->get('/employees')
+            ->assertStatus(200)
             ->assertSee($employees->get(9)->email)
             ->assertDontSee($employees->last()->email);
     }
@@ -101,9 +99,8 @@ class EmployeeTest extends TestCase
             'email' => 'manelgavalda1@gmail.com'
         ]);
 
-        $response = $this->get("/employees/{$employee->id}");
-
-        $response->assertStatus(200)
+        $this->get("/employees/{$employee->id}")
+            ->assertStatus(200)
             ->assertSeeInOrder([
                 'Manel',
                 'Gavaldà',
@@ -120,9 +117,8 @@ class EmployeeTest extends TestCase
             'email' => 'manelgavalda1@gmail.com'
         ]);
 
-        $response = $this->get("/employees/{$employee->id}/edit");
-
-        $response->assertStatus(200)
+        $this->get("/employees/{$employee->id}/edit")
+            ->assertStatus(200)
             ->assertSeeInOrder([
                 'Manel',
                 'Gavaldà',
@@ -133,9 +129,8 @@ class EmployeeTest extends TestCase
     /** @test */
     public function the_employee_creation_form_is_correctly_shown()
     {
-        $response = $this->get("/employees/create");
-
-        $response->assertStatus(200)
+        $this->get("/employees/create")
+            ->assertStatus(200)
             ->assertSee('Create Employee');
     }
 }

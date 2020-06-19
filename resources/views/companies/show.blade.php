@@ -5,6 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">Company Detail</h3>
         </div>
+
         <div class="card-body">
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
@@ -29,6 +30,5 @@
                 </div>
             </div>
         </div>
-        <!-- /.card-body -->
     </div>
 @endsection
