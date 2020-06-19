@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use App\Employee;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EmployeeTest extends TestCase
 {
@@ -47,7 +46,7 @@ class EmployeeTest extends TestCase
 
 
     /** @test */
-    public function it_can_be_deleted()
+    public function an_employee_can_be_deleted()
     {
         $employee = factory('App\Employee')->create();
 
@@ -59,7 +58,7 @@ class EmployeeTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_created()
+    public function an_employee_can_be_created()
     {
         $this->post('/employees', [
             'first_name' => 'Manel',
@@ -75,7 +74,7 @@ class EmployeeTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_updated()
+    public function an_employee_can_be_updated()
     {
         $employee = factory('App\Employee')->create([
             'first_name' => 'Manel',
@@ -91,5 +90,24 @@ class EmployeeTest extends TestCase
             $this->assertEquals($employee->first_name, 'Ramon');
             $this->assertEquals($employee->last_name, 'Zampon');
         });
+    }
+
+    /** @test */
+    public function an_employee_can_be_shown()
+    {
+        $employee = factory('App\Employee')->create([
+            'first_name' => 'Manel',
+            'last_name' => 'Gavaldà',
+            'email' => 'manelgavalda1@gmail.com'
+        ]);
+
+        $response = $this->get("/employees/{$employee->id}");
+
+        $response->assertStatus(200)
+            ->assertSeeInOrder([
+                'Manel',
+                'Gavaldà',
+                'manelgavalda1@gmail.com'
+            ]);
     }
 }

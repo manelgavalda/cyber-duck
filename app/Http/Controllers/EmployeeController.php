@@ -37,13 +37,12 @@ class EmployeeController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
      */
     public function show(Employee $employee)
     {
-        //
+        return view('employees.show', [
+           'employee' => $employee
+        ]);
     }
 
     /**

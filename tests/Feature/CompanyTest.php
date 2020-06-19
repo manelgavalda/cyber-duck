@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use App\Company;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CompanyTest extends TestCase
 {
@@ -44,7 +43,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_deleted()
+    public function a_company_can_be_deleted()
     {
         $company = factory('App\Company')->create();
 
@@ -56,7 +55,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_created()
+    public function a_company_can_be_created()
     {
         $this->post('/companies', [
             'name' => 'Cyber-Duck',
@@ -70,7 +69,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_updated()
+    public function a_company_can_be_updated()
     {
         $company = factory('App\Company')->create([
             'name' => 'Cyber-Duck',
@@ -86,5 +85,22 @@ class CompanyTest extends TestCase
             $this->assertEquals($company->name, 'New-Duck');
             $this->assertEquals($company->email, 'newduck@gmail.com');
         });
+    }
+
+    /** @test */
+    public function a_company_can_be_shown()
+    {
+        $company = factory('App\Company')->create([
+            'name' => 'Cyber-Duck',
+            'email' => 'cyberduck@gmail.com',
+        ]);
+
+        $response = $this->get("/companies/{$company->id}");
+
+        $response->assertStatus(200)
+            ->assertSeeInOrder([
+                'Cyber-Duck',
+                'cyberduck@gmail.com',
+            ]);
     }
 }

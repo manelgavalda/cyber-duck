@@ -37,13 +37,12 @@ class CompanyController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Company  $company
-     * @return \Illuminate\Http\Response
      */
     public function show(Company $company)
     {
-        //
+        return view('companies.show', [
+            'company' => $company
+        ]);
     }
 
     /**

@@ -10,7 +10,7 @@ class EmployeeTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_belongs_to_a_company()
+    public function an_employee_belongs_to_a_company()
     {
         $employee = factory('App\Employee')->create();
         $company = factory('App\Company')->create();
