@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Company;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -40,5 +41,17 @@ class CompanyTest extends TestCase
         $response->assertStatus(200)
             ->assertSee($companies->get(9)->email)
             ->assertDontSee($companies->last()->email);
+    }
+
+    /** @test */
+    public function it_can_be_deleted()
+    {
+        $company = factory('App\Company')->create();
+
+        $this->assertEquals(Company::count(), 1);
+
+        $this->delete("/companies/{$company->id}");
+
+        $this->assertEquals(Company::count(), 0);
     }
 }

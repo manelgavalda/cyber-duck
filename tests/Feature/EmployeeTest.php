@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Employee;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -42,5 +43,18 @@ class EmployeeTest extends TestCase
         $response->assertStatus(200)
             ->assertSee($employees->get(9)->email)
             ->assertDontSee($employees->last()->email);
+    }
+
+
+    /** @test */
+    public function it_can_be_deleted()
+    {
+        $employee = factory('App\Employee')->create();
+
+        $this->assertEquals(Employee::count(), 1);
+
+        $this->delete("/employees/{$employee->id}");
+
+        $this->assertEquals(Employee::count(), 0);
     }
 }

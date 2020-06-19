@@ -74,12 +74,9 @@ class EmployeeController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Employee $employee)
     {
-        //
+        $employee->delete();
     }
 }
