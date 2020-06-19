@@ -57,4 +57,39 @@ class EmployeeTest extends TestCase
 
         $this->assertEquals(Employee::count(), 0);
     }
+
+    /** @test */
+    public function it_can_be_created()
+    {
+        $this->post('/employees', [
+            'first_name' => 'Manel',
+            'last_name' => 'Gavaldà',
+            'email' => 'manelgavalda@gmail.com'
+        ]);
+
+        $this->assertDatabaseHas('employees', [
+            'first_name' => 'Manel',
+            'last_name' => 'Gavaldà',
+            'email' => 'manelgavalda@gmail.com'
+        ]);
+    }
+
+    /** @test */
+    public function it_can_be_updated()
+    {
+        $employee = factory('App\Employee')->create([
+            'first_name' => 'Manel',
+            'last_name' => 'Gavaldà'
+        ]);
+
+        $this->put("/employees/{$employee->id}", [
+            'first_name' => 'Ramon',
+            'last_name' => 'Zampon'
+        ]);
+
+        tap($employee->fresh(), function($employee) {
+            $this->assertEquals($employee->first_name, 'Ramon');
+            $this->assertEquals($employee->last_name, 'Zampon');
+        });
+    }
 }

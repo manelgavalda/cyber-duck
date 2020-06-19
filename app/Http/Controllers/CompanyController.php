@@ -29,13 +29,10 @@ class CompanyController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        Company::create($request->all());
     }
 
     /**
@@ -62,14 +59,10 @@ class CompanyController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Company  $company
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Company $company)
     {
-        //
+        $company->update($request->all());
     }
 
     /**

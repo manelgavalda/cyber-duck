@@ -54,4 +54,37 @@ class CompanyTest extends TestCase
 
         $this->assertEquals(Company::count(), 0);
     }
+
+    /** @test */
+    public function it_can_be_created()
+    {
+        $this->post('/companies', [
+            'name' => 'Cyber-Duck',
+            'email' => 'cyberduck@gmail.com'
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'name' => 'Cyber-Duck',
+            'email' => 'cyberduck@gmail.com'
+        ]);
+    }
+
+    /** @test */
+    public function it_can_be_updated()
+    {
+        $company = factory('App\Company')->create([
+            'name' => 'Cyber-Duck',
+            'email' => 'cyberduck@gmail.com'
+        ]);
+
+        $this->put("/companies/{$company->id}", [
+            'name' => 'New-Duck',
+            'email' => 'newduck@gmail.com'
+        ]);
+
+        tap($company->fresh(), function($company) {
+            $this->assertEquals($company->name, 'New-Duck');
+            $this->assertEquals($company->email, 'newduck@gmail.com');
+        });
+    }
 }
