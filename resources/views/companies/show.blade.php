@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
                     <div class="row">
-                        <div class="col-12 col-sm-3">
+                        <div class="col-12 col-lg-3">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
                                     <span class="info-box-text text-center text-muted">Name</span>
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-3">
+                        <div class="col-12 col-lg-3">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
                                     <span class="info-box-text text-center text-muted">Logo</span>
@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <div class="col-12 col-sm-3">
+    <div class="col-12 col-lg-3">
         <div class="info-box bg-light">
             <div class="info-box-content text-center">
                 <span class="info-box-text text-center text-muted">Employees</span>

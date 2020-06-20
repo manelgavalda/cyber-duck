@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-12 col-sm-2">
+                        <div class="col-12 col-lg-2">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
                                     <span class="info-box-text text-center text-muted">First Name</span>
@@ -36,7 +36,7 @@
                             </div>
                         </div>
                         @if($employee->company()->exists())
-                            <div class="col-12 col-sm-2">
+                            <div class="col-12 col-lg-2">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
                                     <span class="info-box-text text-center text-muted">Company Name</span>
