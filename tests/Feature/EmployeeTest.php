@@ -63,18 +63,51 @@ class EmployeeTest extends TestCase
             ->delete(route('employees.destroy', $employee))
             ->assertRedirect(route('employees.index'));
 
-        $this->assertEquals(Employee::count(), 0);
+        $this->assertEquals(0, Employee::count());
     }
 
     /** @test */
-    public function an_employee_needs_a_first_and_a_last_name()
+    public function an_employee_needs_a_first_a_last_name_and_an_email()
     {
         $this->actingAs($this->admin)
             ->post(route('employees.index'), [
-                'email' => 'manelgavalda@gmail.com'
+                'first_name' => '',
+                'last_name' => '',
+                'email' => ''
             ])->assertSessionHasErrors([
                 'first_name' => 'The first name field is required.',
                 'last_name' => 'The last name field is required.',
+                'email' => 'The email field is required.',
+            ]);
+    }
+
+    /** @test */
+    public function an_employee_email_must_be_unique()
+    {
+        factory('App\Employee')->create([
+            'email' => 'cyberduck@gmail.com'
+        ]);
+
+        $this->actingAs($this->admin)
+            ->post(route('employees.store'), [
+                'first_name' => 'Manel',
+                'last_name' => 'Gavaldà',
+                'email' => 'cyberduck@gmail.com'
+            ])->assertSessionHasErrors([
+                'email' => 'The email has already been taken.'
+            ]);
+    }
+
+    /** @test */
+    public function an_employee_email_must_be_valid()
+    {
+        $this->actingAs($this->admin)
+            ->post(route('employees.store'), [
+                'first_name' => 'Manel',
+                'last_name' => 'Gavaldà',
+                'email' => 'invalidemail'
+            ])->assertSessionHasErrors([
+                'email' => 'The email must be a valid email address.'
             ]);
     }
 
@@ -102,10 +135,56 @@ class EmployeeTest extends TestCase
 
         $this->actingAs($this->admin)
             ->put(route('employees.update', $employee), [
-                'email' => 'manelgavalda@gmail.com'
+                'first_name' => '',
+                'last_name' => '',
+                'email' => ''
             ])->assertSessionHasErrors([
                 'first_name' => 'The first name field is required.',
                 'last_name' => 'The last name field is required.',
+                'email' => 'The email field is required.'
+            ]);
+    }
+
+    /** @test */
+    public function an_employee_email_must_be_valid_when_updating()
+    {
+        $company = factory('App\Employee')->create();
+
+        $this->actingAs($this->admin)
+            ->put(route('employees.update', $company), [
+                'first_name' => 'Manel',
+                'last_name' => 'Gavaldà',
+                'email' => 'invalidemail',
+            ])->assertSessionHasErrors([
+                'email' => 'The email must be a valid email address.'
+            ]);
+    }
+
+    /** @test */
+    public function a_company_email_must_be_unique_when_updating()
+    {
+        $employee = factory('App\Employee')->create([
+            'email' => 'manelgavalda@gmail.com'
+        ]);
+
+        factory('App\Employee')->create([
+            'email' => 'ramonzampon@gmail.com'
+        ]);
+
+        $this->actingAs($this->admin)
+            ->put(route('employees.update', $employee), [
+                'first_name' => 'new first name',
+                'last_name' => 'new last name',
+                'email' => 'manelgavalda@gmail.com',
+            ])->assertRedirect(route('employees.index'));
+
+        $this->actingAs($this->admin)
+            ->put(route('employees.update', $employee), [
+                'first_name' => 'new name',
+                'last_name' => 'new last name',
+                'email' => 'ramonzampon@gmail.com',
+            ])->assertSessionHasErrors([
+                'email' => 'The email has already been taken.'
             ]);
     }
 
@@ -114,18 +193,21 @@ class EmployeeTest extends TestCase
     {
         $employee = factory('App\Employee')->create([
             'first_name' => 'Manel',
-            'last_name' => 'Gavaldà'
+            'last_name' => 'Gavaldà',
+            'email' => 'manelgavalda@gmail.com'
         ]);
 
         $this->actingAs($this->admin)
             ->put(route('employees.update', $employee), [
                 'first_name' => 'Ramon',
-                'last_name' => 'Zampon'
+                'last_name' => 'Zampon',
+                'email' => 'ramonzampon@gmail.com'
             ])->assertRedirect(route('employees.index'));
 
         tap($employee->fresh(), function($employee) {
-            $this->assertEquals($employee->first_name, 'Ramon');
-            $this->assertEquals($employee->last_name, 'Zampon');
+            $this->assertEquals('Ramon', $employee->first_name);
+            $this->assertEquals('Zampon', $employee->last_name);
+            $this->assertEquals('ramonzampon@gmail.com', $employee->email);
         });
     }
 

@@ -19,6 +19,9 @@
                         name="first_name"
                         value="{{ old('first_name') }}">
                 </div>
+                @error('first_name')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
                 <div class="form-group">
                     <label for="first_name">Last Name</label>
                     <input
@@ -29,6 +32,10 @@
                         name="last_name"
                         value="{{ old('last_name') }}">
                 </div>
+                @error('last_name')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
+
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input
@@ -39,6 +46,9 @@
                         name="email"
                         value="{{ old('email') }}">
                 </div>
+                @error('email')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="card-footer">

@@ -61,18 +61,47 @@ class CompanyTest extends TestCase
             ->delete(route('companies.destroy', $company))
             ->assertRedirect(route('companies.index'));
 
-        $this->assertEquals(Company::count(), 0);
+        $this->assertEquals(0, Company::count());
     }
 
     /** @test */
-    public function a_company_name_is_required()
+    public function a_company_name_and_email_are_required()
     {
         $this->actingAs($this->admin)
             ->post(route('companies.store'), [
                 'name' => '',
+                'email' => ''
+            ])->assertSessionHasErrors([
+                'name' => 'The name field is required.',
+                'email' => 'The email field is required.'
+            ]);
+    }
+
+    /** @test */
+    public function a_company_email_must_be_unique()
+    {
+        factory('App\Company')->create([
+            'email' => 'cyberduck@gmail.com'
+        ]);
+
+        $this->actingAs($this->admin)
+            ->post(route('companies.store'), [
+                'name' => 'CyberDuck',
                 'email' => 'cyberduck@gmail.com'
             ])->assertSessionHasErrors([
-                'name' => 'The name field is required.'
+                'email' => 'The email has already been taken.'
+            ]);
+    }
+
+    /** @test */
+    public function a_company_email_must_be_valid()
+    {
+        $this->actingAs($this->admin)
+            ->post(route('companies.store'), [
+                'name' => 'CyberDuck',
+                'email' => 'cyberduck'
+            ])->assertSessionHasErrors([
+                'email' => 'The email must be a valid email address.'
             ]);
     }
 
@@ -90,21 +119,59 @@ class CompanyTest extends TestCase
             'email' => 'cyberduck@gmail.com'
         ]);
     }
+
     /** @test */
-    public function a_company_name_is_required_when_updating()
+    public function a_company_name_and_email_are_required_when_updating()
     {
-        $company = factory('App\Company')->create([
-            'name' => 'Cyber-Duck',
-            'email' => 'cyberduck@gmail.com',
-            'website' => 'cyber-duck.co.uk'
-        ]);
+        $company = factory('App\Company')->create();
 
         $this->actingAs($this->admin)
             ->put(route('companies.update', $company), [
                 'name' => '',
+                'email' => '',
+            ])->assertSessionHasErrors([
+                'name' => 'The name field is required.',
+                'email' => 'The email field is required.'
+            ]);
+    }
+
+    /** @test */
+    public function a_company_email_must_be_valid_when_updating()
+    {
+        $company = factory('App\Company')->create();
+
+        $this->actingAs($this->admin)
+            ->put(route('companies.update', $company), [
+                'name' => 'new name',
+                'email' => 'ewqewq',
+            ])->assertSessionHasErrors([
+                'email' => 'The email must be a valid email address.'
+            ]);
+    }
+
+    /** @test */
+    public function a_company_email_must_be_unique_when_updating()
+    {
+        $company = factory('App\Company')->create([
+            'email' => 'cyberduck@gmail.com'
+        ]);
+
+        factory('App\Company')->create([
+            'email' => 'newduck@gmail.com'
+        ]);
+
+        $this->actingAs($this->admin)
+            ->put(route('companies.update', $company), [
+                'name' => 'new name',
+                'email' => 'cyberduck@gmail.com',
+            ])->assertRedirect(route('companies.index'));
+
+        $this->actingAs($this->admin)
+            ->put(route('companies.update', $company), [
+                'name' => 'new name',
                 'email' => 'newduck@gmail.com',
             ])->assertSessionHasErrors([
-                'name' => 'The name field is required.'
+                'email' => 'The email has already been taken.'
             ]);
     }
 
@@ -125,9 +192,9 @@ class CompanyTest extends TestCase
             ])->assertRedirect(route('companies.index'));
 
         tap($company->fresh(), function($company) {
-            $this->assertEquals($company->name, 'New-Duck');
-            $this->assertEquals($company->email, 'newduck@gmail.com');
-            $this->assertEquals($company->website, 'new-duck.co.uk');
+            $this->assertEquals('New-Duck', $company->name);
+            $this->assertEquals('newduck@gmail.com', $company->email);
+            $this->assertEquals('new-duck.co.uk', $company->website);
         });
     }
 

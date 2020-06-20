@@ -15,6 +15,7 @@ class UpdateCompany extends FormRequest
     {
         return [
             'name' => 'required',
+            'email' => 'required|email|unique:companies,email,' . $this->company->id,
             'logo' => 'nullable|dimensions:min_width=100,min_height=100'
         ];
     }

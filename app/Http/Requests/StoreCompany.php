@@ -15,6 +15,7 @@ class StoreCompany extends FormRequest
     {
         return [
             'name' => 'required',
+            'email' => 'required|email|unique:companies',
             'logo' => 'nullable|dimensions:min_width=100,min_height=100'
         ];
     }
