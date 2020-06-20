@@ -62,6 +62,16 @@
                         name="phone"
                         value="{{ old('phone', $employee->phone) }}">
                 </div>
+
+                <div class="form-group">
+                    <label>Company</label>
+                    <select class="form-control" name="company_id">
+                        <option value="">Select one...</option>
+                        @foreach($companies as $company)
+                            <option @if($employee->company_id == $company->id) selected @endif value="{{ $company->id }}">{{ $company->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             <div class="card-footer">

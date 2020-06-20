@@ -14,7 +14,7 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered text-center">
                 <thead>
                 <tr>
                     <th style="width: 10px">#</th>
@@ -33,15 +33,19 @@
                         <td>{{ $company->website }}</td>
                         <td>
                             <a href="{{ route('companies.show', $company->id) }}">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <button class="btn btn-inline btn-outline-primary">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
                             </a>
                             <a href="{{ route('companies.edit', $company->id) }}">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                <button class="btn btn-inline btn-outline-success">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </button>
                             </a>
                             <form role="form" action="{{ route('companies.destroy', $company) }}" method="post">
                                 @csrf
                                 @method('DELETE')
-                                <button>
+                                <button class="btn btn-inline btn-outline-danger">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </button>
                             </form>

@@ -14,7 +14,7 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered text-center">
                 <thead>
                 <tr>
                     <th style="width: 10px">#</th>
@@ -22,6 +22,7 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Company</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -33,17 +34,22 @@
                         <td>{{ $employee->last_name }}</td>
                         <td>{{ $employee->email }}</td>
                         <td>{{ $employee->phone }}</td>
+                        <td>{{ optional($employee->company)->name }}</td>
                         <td>
                             <a href="{{ route('employees.show', $employee->id) }}">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <button class="btn btn-inline btn-outline-primary">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
                             </a>
                             <a href="{{ route('employees.edit', $employee->id) }}">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                <button class="btn btn-inline btn-outline-success">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </button>
                             </a>
                             <form role="form" action="{{ route('employees.destroy', $employee) }}" method="post">
                                 @csrf
                                 @method('DELETE')
-                                <button>
+                                <button class="btn btn-inline btn-outline-danger">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </button>
                             </form>

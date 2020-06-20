@@ -20,13 +20,20 @@ class EmployeeTest extends TestCase
     /** @test */
     public function employees_are_correctly_created_and_shown()
     {
+        $this->withoutExceptionHandling();
+
         $this->actingAs($this->admin);
+
+        $company = factory('App\Company')->create([
+           'name' => 'cyber-duck'
+        ]);
 
         $this->post(route('employees.store'), [
             'first_name' => 'Manel',
             'last_name' => 'Gavaldà',
             'email' => 'manelgavalda1@gmail.com',
-            'phone' => '699112233'
+            'phone' => '699112233',
+            'company_id' => $company->id
         ])->assertRedirect(route('employees.index'));
 
         $this->actingAs($this->admin)
@@ -38,6 +45,7 @@ class EmployeeTest extends TestCase
                 'Gavaldà',
                 'manelgavalda1@gmail.com',
                 '699112233',
+                'cyber-duck'
             ]);
     }
 
@@ -152,7 +160,7 @@ class EmployeeTest extends TestCase
             ->post(route('employees.index'), [
                 'first_name' => 'Manel',
                 'last_name' => 'Gavaldà',
-                'email' => 'manelgavalda@gmail.com'
+                'email' => 'manelgavalda@gmail.com',
             ])->assertRedirect(route('employees.index'));
 
         $this->assertDatabaseHas('employees', [
@@ -229,7 +237,11 @@ class EmployeeTest extends TestCase
             'first_name' => 'Manel',
             'last_name' => 'Gavaldà',
             'email' => 'manelgavalda@gmail.com',
-            'phone' => '977332211'
+            'phone' => '977332211',
+        ]);
+
+        $company = factory('App\Company')->create([
+            'name' => 'cyber-duck'
         ]);
 
         $this->actingAs($this->admin)
@@ -237,7 +249,8 @@ class EmployeeTest extends TestCase
                 'first_name' => 'Ramon',
                 'last_name' => 'Zampon',
                 'email' => 'ramonzampon@gmail.com',
-                'phone' => '977112233'
+                'phone' => '977112233',
+                'company_id' => $company->id
             ])->assertRedirect(route('employees.index'));
 
         tap($employee->fresh(), function($employee) {
@@ -245,6 +258,7 @@ class EmployeeTest extends TestCase
             $this->assertEquals('Zampon', $employee->last_name);
             $this->assertEquals('ramonzampon@gmail.com', $employee->email);
             $this->assertEquals('977112233', $employee->phone);
+            $this->assertEquals('cyber-duck', $employee->company->name);
         });
     }
 
