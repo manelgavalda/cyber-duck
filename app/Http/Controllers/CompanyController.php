@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use Illuminate\Http\Request;
+use Storage;
 
 class CompanyController extends Controller
 {
@@ -30,6 +31,14 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'logo' => 'dimensions:min_width=100,min_height=100'
+        ]);
+
+        if($request->file('logo')) {
+            $request->merge(['logo_path' => $request->file('logo')->store('logos', 'public')]);
+        }
+
         Company::create($request->all());
 
         return redirect()->route('companies.index');
@@ -60,6 +69,15 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
+        $request->validate([
+            'logo' => 'nullable|dimensions:min_width=100,min_height=100'
+        ]);
+
+        if($request->file('logo')) {
+            Storage::disk('public')->delete($company->logo_path);
+            $request->merge(['logo_path' => $request->file('logo')->store('logos', 'public')]);
+        }
+
         $company->update($request->all());
 
         return redirect()->route('companies.index');

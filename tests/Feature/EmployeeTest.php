@@ -10,13 +10,6 @@ class EmployeeTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->admin = factory('App\User')->create();
-    }
-
     /** @test */
     public function you_need_to_be_authenticated_to_see_employees()
     {

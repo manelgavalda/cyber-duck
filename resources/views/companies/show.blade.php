@@ -26,6 +26,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Logo</span>
+                                    <span class="info-box-number text-center text-muted mb-0">
+                                        <img src="{{ asset($company->logo_path) }}">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
