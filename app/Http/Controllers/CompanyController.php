@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use Illuminate\Http\Request;
 use Storage;
+use App\Company;
+use App\Http\Requests\StoreCompany;
+use App\Http\Requests\UpdateCompany;
 
 class CompanyController extends Controller
 {
@@ -29,12 +30,8 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCompany $request)
     {
-        $request->validate([
-            'logo' => 'dimensions:min_width=100,min_height=100'
-        ]);
-
         if($request->file('logo')) {
             $request->merge(['logo_path' => $request->file('logo')->store('logos', 'public')]);
         }
@@ -67,12 +64,8 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(UpdateCompany $request, Company $company)
     {
-        $request->validate([
-            'logo' => 'nullable|dimensions:min_width=100,min_height=100'
-        ]);
-
         if($request->file('logo')) {
             Storage::disk('public')->delete($company->logo_path);
             $request->merge(['logo_path' => $request->file('logo')->store('logos', 'public')]);

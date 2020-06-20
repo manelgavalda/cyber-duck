@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Employee;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreEmployee;
+use App\Http\Requests\UpdateEmployee;
 
 class EmployeeController extends Controller
 {
@@ -28,7 +29,7 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEmployee $request)
     {
         Employee::create($request->all());
 
@@ -58,7 +59,7 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(UpdateEmployee $request, Employee $employee)
     {
         $employee->update($request->all());
 

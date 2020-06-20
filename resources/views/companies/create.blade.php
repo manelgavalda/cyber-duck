@@ -19,6 +19,10 @@
                         name="name"
                         value="{{ old('name') }}">
                 </div>
+                @error('name')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
+
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input
@@ -29,6 +33,21 @@
                         name="email"
                         value="{{ old('email') }}">
                 </div>
+                @error('email')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
+
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="website"
+                        placeholder="Website"
+                        name="website"
+                        value="{{ old('website') }}">
+                </div>
+
                 <div class="form-group">
                     <label for="logo">File input</label>
                     <div class="input-group">
@@ -41,6 +60,9 @@
                         </div>
                     </div>
                 </div>
+                @error('logo')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="card-footer">

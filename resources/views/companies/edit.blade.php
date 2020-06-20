@@ -20,6 +20,10 @@
                         name="name"
                         value="{{ old('name', $company->name) }}">
                 </div>
+                @error('name')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
+
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input
@@ -30,6 +34,21 @@
                         name="email"
                         value="{{ old('email', $company->email) }}">
                 </div>
+                @error('email')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
+
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="website"
+                        placeholder="Website"
+                        name="website"
+                        value="{{ old('website', $company->website) }}">
+                </div>
+
                 <div class="form-group">
                     <label for="logo">File input</label>
                     <div class="input-group">
@@ -41,8 +60,11 @@
                             <span class="input-group-text" id="">Upload</span>
                         </div>
                     </div>
-                    <img src="{{ asset($company->logo_path) }}" alt="">
+                    <img src="{{ asset($company->logo_path) }}" height="200" width="200">
                 </div>
+                @error('logo')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="card-footer">

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Company;
 use Storage;
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;

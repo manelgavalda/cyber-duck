@@ -67,6 +67,18 @@ class EmployeeTest extends TestCase
     }
 
     /** @test */
+    public function an_employee_needs_a_first_and_a_last_name()
+    {
+        $this->actingAs($this->admin)
+            ->post(route('employees.index'), [
+                'email' => 'manelgavalda@gmail.com'
+            ])->assertSessionHasErrors([
+                'first_name' => 'The first name field is required.',
+                'last_name' => 'The last name field is required.',
+            ]);
+    }
+
+    /** @test */
     public function an_employee_can_be_created()
     {
         $this->actingAs($this->admin)
@@ -81,6 +93,20 @@ class EmployeeTest extends TestCase
             'last_name' => 'Gavaldà',
             'email' => 'manelgavalda@gmail.com'
         ]);
+    }
+
+    /** @test */
+    public function an_employee_needs_a_first_and_a_last_name_to_be_updated()
+    {
+        $employee = factory('App\Employee')->create();
+
+        $this->actingAs($this->admin)
+            ->put(route('employees.update', $employee), [
+                'email' => 'manelgavalda@gmail.com'
+            ])->assertSessionHasErrors([
+                'first_name' => 'The first name field is required.',
+                'last_name' => 'The last name field is required.',
+            ]);
     }
 
     /** @test */

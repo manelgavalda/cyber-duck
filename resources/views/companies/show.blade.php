@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
                     <div class="row">
-                        <div class="col-12 col-sm-4">
+                        <div class="col-12 col-sm-3">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
                                     <span class="info-box-text text-center text-muted">Name</span>
@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-4">
+                        <div class="col-12 col-sm-3">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
                                     <span class="info-box-text text-center text-muted">Email</span>
@@ -26,12 +26,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-4">
+                        <div class="col-12 col-sm-3">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Website</span>
+                                    <span class="info-box-number text-center text-muted mb-0">{{ $company->website }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-3">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
                                     <span class="info-box-text text-center text-muted">Logo</span>
                                     <span class="info-box-number text-center text-muted mb-0">
-                                        <img src="{{ asset($company->logo_path) }}">
+                                        <img src="{{ asset($company->logo_path) }}" height="200" width="200">
                                     </span>
                                 </div>
                             </div>

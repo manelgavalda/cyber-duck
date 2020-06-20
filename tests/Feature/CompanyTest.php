@@ -18,16 +18,17 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companies_are_correctly_shown()
+    public function companies_are_correctly_saved_and_shown()
     {
-        factory('App\Company')->create([
+        $this->actingAs($this->admin);
+
+        $this->post(route('companies.store'), [
             'name' => 'Cyber-Duck',
             'email' => 'cyberduck@gmail.com',
             'website' => 'cyberduck.co.uk'
-        ]);
+        ])->assertRedirect(route('companies.index'));
 
-        $this->actingAs($this->admin)
-            ->get(route('companies.index'))
+        $this->get(route('companies.index'))
             ->assertOk()
             ->assertSeeInOrder([
                 1,
@@ -64,6 +65,18 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
+    public function a_company_name_is_required()
+    {
+        $this->actingAs($this->admin)
+            ->post(route('companies.store'), [
+                'name' => '',
+                'email' => 'cyberduck@gmail.com'
+            ])->assertSessionHasErrors([
+                'name' => 'The name field is required.'
+            ]);
+    }
+
+    /** @test */
     public function a_company_can_be_created()
     {
         $this->actingAs($this->admin)
@@ -77,24 +90,44 @@ class CompanyTest extends TestCase
             'email' => 'cyberduck@gmail.com'
         ]);
     }
+    /** @test */
+    public function a_company_name_is_required_when_updating()
+    {
+        $company = factory('App\Company')->create([
+            'name' => 'Cyber-Duck',
+            'email' => 'cyberduck@gmail.com',
+            'website' => 'cyber-duck.co.uk'
+        ]);
+
+        $this->actingAs($this->admin)
+            ->put(route('companies.update', $company), [
+                'name' => '',
+                'email' => 'newduck@gmail.com',
+            ])->assertSessionHasErrors([
+                'name' => 'The name field is required.'
+            ]);
+    }
 
     /** @test */
     public function a_company_can_be_updated()
     {
         $company = factory('App\Company')->create([
             'name' => 'Cyber-Duck',
-            'email' => 'cyberduck@gmail.com'
+            'email' => 'cyberduck@gmail.com',
+            'website' => 'cyber-duck.co.uk'
         ]);
 
         $this->actingAs($this->admin)
             ->put(route('companies.update', $company), [
                 'name' => 'New-Duck',
-                'email' => 'newduck@gmail.com'
+                'email' => 'newduck@gmail.com',
+                'website' => 'new-duck.co.uk'
             ])->assertRedirect(route('companies.index'));
 
         tap($company->fresh(), function($company) {
             $this->assertEquals($company->name, 'New-Duck');
             $this->assertEquals($company->email, 'newduck@gmail.com');
+            $this->assertEquals($company->website, 'new-duck.co.uk');
         });
     }
 
