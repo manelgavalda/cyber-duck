@@ -34,7 +34,7 @@ class AddCompanyLogoTest extends TestCase
     }
 
     /** @test */
-    public function a_company_may_have_a_logo()
+    public function a_company_can_have_a_logo_if_it_is_valid()
     {
         $this->actingAs($this->admin)
             ->post(route('companies.store'), [
@@ -47,7 +47,7 @@ class AddCompanyLogoTest extends TestCase
     }
 
     /** @test */
-    public function a_company_may_update_the_logo_with_a_valid_one()
+    public function a_company_logo_needs_to_be_valid_when_updating()
     {
         $file = UploadedFile::fake()->image('logo.png', 100, 100);
 
@@ -73,7 +73,7 @@ class AddCompanyLogoTest extends TestCase
     }
 
     /** @test */
-    public function a_company_may_update_the_logo_just_if_provided()
+    public function a_company_can_update_the_company_with_the_old_logo()
     {
         $file = UploadedFile::fake()->image('logo.png', 100, 100);
 
@@ -96,7 +96,7 @@ class AddCompanyLogoTest extends TestCase
     }
 
     /** @test */
-    public function a_company_may_update_the_logo_if_valid()
+    public function a_company_may_update_the_logo_if_it_is_valid()
     {
         $file = UploadedFile::fake()->image('logo.png', 100, 100);
 
@@ -117,5 +117,25 @@ class AddCompanyLogoTest extends TestCase
 
         Storage::disk('public')->assertMissing('logos/' . $file->hashName());
         Storage::disk('public')->assertExists('logos/' . $newFile->hashName());
+    }
+
+    /** @test */
+    public function a_company_is_deleted_with_the_company()
+    {
+        $file = UploadedFile::fake()->image('logo.png', 100, 100);
+
+        $file->store('logos', 'public');
+
+        $company = factory('App\Company')->create([
+            'logo_path' => 'logos/' . $file->hashName()
+        ]);
+
+        Storage::disk('public')->assertExists('logos/' . $file->hashName());
+
+        $this->actingAs($this->admin)
+            ->delete(route('companies.destroy', $company))
+            ->assertRedirect(route('companies.index'));
+
+        Storage::disk('public')->assertMissing('logos/' . $file->hashName());
     }
 }

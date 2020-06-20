@@ -81,6 +81,8 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
+        Storage::disk('public')->delete($company->logo_path);
+
         $company->delete();
 
         return redirect()->route('companies.index');

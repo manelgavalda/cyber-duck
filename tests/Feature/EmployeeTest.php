@@ -18,14 +18,16 @@ class EmployeeTest extends TestCase
     }
 
     /** @test */
-    public function employees_are_correctly_shown()
+    public function employees_are_correctly_created_and_shown()
     {
-        factory('App\Employee')->create([
+        $this->actingAs($this->admin);
+
+        $this->post(route('employees.store'), [
             'first_name' => 'Manel',
             'last_name' => 'Gavaldà',
             'email' => 'manelgavalda1@gmail.com',
             'phone' => '699112233'
-        ]);
+        ])->assertRedirect(route('employees.index'));
 
         $this->actingAs($this->admin)
             ->get(route('employees.index'))
@@ -51,19 +53,51 @@ class EmployeeTest extends TestCase
             ->assertDontSee($employees->last()->email);
     }
 
-
     /** @test */
-    public function an_employee_can_be_deleted()
+    public function an_employee_can_be_shown()
     {
-        $employee = factory('App\Employee')->create();
-
-        $this->assertEquals(Employee::count(), 1);
+        $employee = factory('App\Employee')->create([
+            'first_name' => 'Manel',
+            'last_name' => 'Gavaldà',
+            'email' => 'manelgavalda1@gmail.com'
+        ]);
 
         $this->actingAs($this->admin)
-            ->delete(route('employees.destroy', $employee))
-            ->assertRedirect(route('employees.index'));
+            ->get(route('employees.show', $employee))
+            ->assertOk()
+            ->assertSeeInOrder([
+                'Manel',
+                'Gavaldà',
+                'manelgavalda1@gmail.com'
+            ]);
+    }
 
-        $this->assertEquals(0, Employee::count());
+    /** @test */
+    public function the_employee_update_form_is_correctly_shown()
+    {
+        $employee = factory('App\Employee')->create([
+            'first_name' => 'Manel',
+            'last_name' => 'Gavaldà',
+            'email' => 'manelgavalda1@gmail.com'
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get(route('employees.edit', $employee))
+            ->assertOk()
+            ->assertSeeInOrder([
+                'Manel',
+                'Gavaldà',
+                'manelgavalda1@gmail.com'
+            ]);
+    }
+
+    /** @test */
+    public function the_employee_creation_form_is_correctly_shown()
+    {
+        $this->actingAs($this->admin)
+            ->get(route('employees.create'))
+            ->assertOk()
+            ->assertSee('Create Employee');
     }
 
     /** @test */
@@ -148,10 +182,10 @@ class EmployeeTest extends TestCase
     /** @test */
     public function an_employee_email_must_be_valid_when_updating()
     {
-        $company = factory('App\Employee')->create();
+        $employee = factory('App\Employee')->create();
 
         $this->actingAs($this->admin)
-            ->put(route('employees.update', $company), [
+            ->put(route('employees.update', $employee), [
                 'first_name' => 'Manel',
                 'last_name' => 'Gavaldà',
                 'email' => 'invalidemail',
@@ -161,7 +195,7 @@ class EmployeeTest extends TestCase
     }
 
     /** @test */
-    public function a_company_email_must_be_unique_when_updating()
+    public function an_employee_email_must_be_unique_when_updating()
     {
         $employee = factory('App\Employee')->create([
             'email' => 'manelgavalda@gmail.com'
@@ -194,67 +228,37 @@ class EmployeeTest extends TestCase
         $employee = factory('App\Employee')->create([
             'first_name' => 'Manel',
             'last_name' => 'Gavaldà',
-            'email' => 'manelgavalda@gmail.com'
+            'email' => 'manelgavalda@gmail.com',
+            'phone' => '977332211'
         ]);
 
         $this->actingAs($this->admin)
             ->put(route('employees.update', $employee), [
                 'first_name' => 'Ramon',
                 'last_name' => 'Zampon',
-                'email' => 'ramonzampon@gmail.com'
+                'email' => 'ramonzampon@gmail.com',
+                'phone' => '977112233'
             ])->assertRedirect(route('employees.index'));
 
         tap($employee->fresh(), function($employee) {
             $this->assertEquals('Ramon', $employee->first_name);
             $this->assertEquals('Zampon', $employee->last_name);
             $this->assertEquals('ramonzampon@gmail.com', $employee->email);
+            $this->assertEquals('977112233', $employee->phone);
         });
     }
 
     /** @test */
-    public function an_employee_can_be_shown()
+    public function an_employee_can_be_deleted()
     {
-        $employee = factory('App\Employee')->create([
-            'first_name' => 'Manel',
-            'last_name' => 'Gavaldà',
-            'email' => 'manelgavalda1@gmail.com'
-        ]);
+        $employee = factory('App\Employee')->create();
+
+        $this->assertEquals(1, Employee::count());
 
         $this->actingAs($this->admin)
-            ->get(route('employees.show', $employee))
-            ->assertOk()
-            ->assertSeeInOrder([
-                'Manel',
-                'Gavaldà',
-                'manelgavalda1@gmail.com'
-            ]);
-    }
+            ->delete(route('employees.destroy', $employee))
+            ->assertRedirect(route('employees.index'));
 
-    /** @test */
-    public function the_employee_update_form_is_correctly_shown()
-    {
-        $employee = factory('App\Employee')->create([
-            'first_name' => 'Manel',
-            'last_name' => 'Gavaldà',
-            'email' => 'manelgavalda1@gmail.com'
-        ]);
-
-        $this->actingAs($this->admin)
-            ->get(route('employees.edit', $employee))
-            ->assertOk()
-            ->assertSeeInOrder([
-                'Manel',
-                'Gavaldà',
-                'manelgavalda1@gmail.com'
-            ]);
-    }
-
-    /** @test */
-    public function the_employee_creation_form_is_correctly_shown()
-    {
-        $this->actingAs($this->admin)
-            ->get(route('employees.create'))
-            ->assertOk()
-            ->assertSee('Create Employee');
+        $this->assertEquals(0, Employee::count());
     }
 }

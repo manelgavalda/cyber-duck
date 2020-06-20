@@ -18,7 +18,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companies_are_correctly_saved_and_shown()
+    public function companies_are_correctly_created_and_shown()
     {
         $this->actingAs($this->admin);
 
@@ -51,17 +51,46 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function a_company_can_be_deleted()
+    public function a_company_can_be_shown()
     {
-        $company = factory('App\Company')->create();
-
-        $this->assertEquals(Company::count(), 1);
+        $company = factory('App\Company')->create([
+            'name' => 'Cyber-Duck',
+            'email' => 'cyberduck@gmail.com',
+        ]);
 
         $this->actingAs($this->admin)
-            ->delete(route('companies.destroy', $company))
-            ->assertRedirect(route('companies.index'));
+            ->get(route('companies.show', $company))
+            ->assertOk()
+            ->assertSeeInOrder([
+                'Cyber-Duck',
+                'cyberduck@gmail.com',
+            ]);
+    }
 
-        $this->assertEquals(0, Company::count());
+    /** @test */
+    public function the_company_update_form_is_correctly_shown()
+    {
+        $company = factory('App\Company')->create([
+            'name' => 'Cyber-Duck',
+            'email' => 'cyberduck@gmail.com'
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get(route('companies.edit', $company))
+            ->assertOk()
+            ->assertSeeInOrder([
+                'Cyber-Duck',
+                'cyberduck@gmail.com'
+            ]);
+    }
+
+    /** @test */
+    public function the_company_creation_form_is_correctly_shown()
+    {
+        $this->actingAs($this->admin)
+            ->get(route('companies.create'))
+            ->assertOk()
+            ->assertSee('Create Company');
     }
 
     /** @test */
@@ -106,7 +135,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function a_company_can_be_created()
+    public function a_company_can_be_created_if_valid()
     {
         $this->actingAs($this->admin)
             ->post(route('companies.store'), [
@@ -128,7 +157,7 @@ class CompanyTest extends TestCase
         $this->actingAs($this->admin)
             ->put(route('companies.update', $company), [
                 'name' => '',
-                'email' => '',
+                'email' => ''
             ])->assertSessionHasErrors([
                 'name' => 'The name field is required.',
                 'email' => 'The email field is required.'
@@ -143,7 +172,7 @@ class CompanyTest extends TestCase
         $this->actingAs($this->admin)
             ->put(route('companies.update', $company), [
                 'name' => 'new name',
-                'email' => 'ewqewq',
+                'email' => 'invalidemail'
             ])->assertSessionHasErrors([
                 'email' => 'The email must be a valid email address.'
             ]);
@@ -163,20 +192,20 @@ class CompanyTest extends TestCase
         $this->actingAs($this->admin)
             ->put(route('companies.update', $company), [
                 'name' => 'new name',
-                'email' => 'cyberduck@gmail.com',
+                'email' => 'cyberduck@gmail.com'
             ])->assertRedirect(route('companies.index'));
 
         $this->actingAs($this->admin)
             ->put(route('companies.update', $company), [
                 'name' => 'new name',
-                'email' => 'newduck@gmail.com',
+                'email' => 'newduck@gmail.com'
             ])->assertSessionHasErrors([
                 'email' => 'The email has already been taken.'
             ]);
     }
 
     /** @test */
-    public function a_company_can_be_updated()
+    public function a_company_can_be_updated_if_valid()
     {
         $company = factory('App\Company')->create([
             'name' => 'Cyber-Duck',
@@ -199,45 +228,16 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function a_company_can_be_shown()
+    public function a_company_can_be_deleted()
     {
-        $company = factory('App\Company')->create([
-            'name' => 'Cyber-Duck',
-            'email' => 'cyberduck@gmail.com',
-        ]);
+        $company = factory('App\Company')->create();
+
+        $this->assertEquals(1, Company::count());
 
         $this->actingAs($this->admin)
-            ->get(route('companies.show', $company))
-            ->assertOk()
-            ->assertSeeInOrder([
-                'Cyber-Duck',
-                'cyberduck@gmail.com',
-            ]);
-    }
+            ->delete(route('companies.destroy', $company))
+            ->assertRedirect(route('companies.index'));
 
-    /** @test */
-    public function the_company_update_form_is_correctly_shown()
-    {
-        $company = factory('App\Company')->create([
-            'name' => 'Cyber-Duck',
-            'email' => 'cyberduck@gmail.com'
-        ]);
-
-        $this->actingAs($this->admin)
-            ->get(route('companies.edit', $company))
-            ->assertOk()
-            ->assertSeeInOrder([
-                'Cyber-Duck',
-                'cyberduck@gmail.com'
-            ]);
-    }
-
-    /** @test */
-    public function the_company_creation_form_is_correctly_shown()
-    {
-        $this->actingAs($this->admin)
-            ->get(route('companies.create'))
-            ->assertOk()
-            ->assertSee('Create Company');
+        $this->assertEquals(0, Company::count());
     }
 }

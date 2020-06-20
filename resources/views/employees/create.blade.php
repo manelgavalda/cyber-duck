@@ -49,6 +49,17 @@
                 @error('email')
                     <p style="color:red">{{ $message }}</p>
                 @enderror
+
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="phone"
+                        placeholder="Enter phone"
+                        name="phone"
+                        value="{{ old('phone') }}">
+                </div>
             </div>
 
             <div class="card-footer">
