@@ -14,6 +14,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Website</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -23,6 +24,21 @@
                         <td>{{ $company->name }}</td>
                         <td>{{ $company->email }}</td>
                         <td>{{ $company->website }}</td>
+                        <td>
+                            <a href="{{ route('companies.show', $company->id) }}">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                            <a href="{{ route('companies.edit', $company->id) }}">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                            <form role="form" action="{{ route('companies.destroy', $company) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button>
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

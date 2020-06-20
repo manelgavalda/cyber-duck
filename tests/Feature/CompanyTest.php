@@ -10,6 +10,20 @@ class CompanyTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->admin = factory('App\User')->create();
+    }
+
+    /** @test */
+    public function you_need_to_be_authenticated_to_see_companies()
+    {
+        $this->get(route('companies.index'))
+            ->assertRedirect(route('login'));
+    }
+
     /** @test */
     public function companies_are_correctly_shown()
     {
@@ -19,8 +33,9 @@ class CompanyTest extends TestCase
             'website' => 'cyberduck.co.uk'
         ]);
 
-        $this->get('/companies')
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('companies.index'))
+            ->assertOk()
             ->assertSeeInOrder([
                 1,
                 'Cyber-Duck',
@@ -34,8 +49,9 @@ class CompanyTest extends TestCase
     {
         $companies = factory('App\Company', 11)->create();
 
-        $this->get('/companies')
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('companies.index'))
+            ->assertOk()
             ->assertSee($companies->get(9)->email)
             ->assertDontSee($companies->last()->email);
     }
@@ -47,7 +63,9 @@ class CompanyTest extends TestCase
 
         $this->assertEquals(Company::count(), 1);
 
-        $this->delete("/companies/{$company->id}");
+        $this->actingAs($this->admin)
+            ->delete(route('companies.destroy', $company))
+            ->assertRedirect(route('companies.index'));
 
         $this->assertEquals(Company::count(), 0);
     }
@@ -55,10 +73,11 @@ class CompanyTest extends TestCase
     /** @test */
     public function a_company_can_be_created()
     {
-        $this->post('/companies', [
-            'name' => 'Cyber-Duck',
-            'email' => 'cyberduck@gmail.com'
-        ]);
+        $this->actingAs($this->admin)
+            ->post(route('companies.store'), [
+                'name' => 'Cyber-Duck',
+                'email' => 'cyberduck@gmail.com'
+            ])->assertRedirect(route('companies.index'));
 
         $this->assertDatabaseHas('companies', [
             'name' => 'Cyber-Duck',
@@ -74,10 +93,11 @@ class CompanyTest extends TestCase
             'email' => 'cyberduck@gmail.com'
         ]);
 
-        $this->put("/companies/{$company->id}", [
-            'name' => 'New-Duck',
-            'email' => 'newduck@gmail.com'
-        ]);
+        $this->actingAs($this->admin)
+            ->put(route('companies.update', $company), [
+                'name' => 'New-Duck',
+                'email' => 'newduck@gmail.com'
+            ])->assertRedirect(route('companies.index'));
 
         tap($company->fresh(), function($company) {
             $this->assertEquals($company->name, 'New-Duck');
@@ -93,8 +113,9 @@ class CompanyTest extends TestCase
             'email' => 'cyberduck@gmail.com',
         ]);
 
-        $this->get("/companies/{$company->id}")
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('companies.show', $company))
+            ->assertOk()
             ->assertSeeInOrder([
                 'Cyber-Duck',
                 'cyberduck@gmail.com',
@@ -109,8 +130,9 @@ class CompanyTest extends TestCase
             'email' => 'cyberduck@gmail.com'
         ]);
 
-        $this->get("/companies/{$company->id}/edit")
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('companies.edit', $company))
+            ->assertOk()
             ->assertSeeInOrder([
                 'Cyber-Duck',
                 'cyberduck@gmail.com'
@@ -120,8 +142,9 @@ class CompanyTest extends TestCase
     /** @test */
     public function the_company_creation_form_is_correctly_shown()
     {
-        $this->get("/companies/create")
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('companies.create'))
+            ->assertOk()
             ->assertSee('Create Company');
     }
 }

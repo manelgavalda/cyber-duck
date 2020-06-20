@@ -31,6 +31,8 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         Employee::create($request->all());
+
+        return redirect()->route('employees.index');
     }
 
     /**
@@ -59,6 +61,8 @@ class EmployeeController extends Controller
     public function update(Request $request, Employee $employee)
     {
         $employee->update($request->all());
+
+        return redirect()->route('employees.index');
     }
 
     /**
@@ -67,5 +71,7 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee)
     {
         $employee->delete();
+
+        return redirect()->route('employees.index');
     }
 }

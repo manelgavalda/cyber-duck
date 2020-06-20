@@ -31,6 +31,8 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         Company::create($request->all());
+
+        return redirect()->route('companies.index');
     }
 
     /**
@@ -59,6 +61,8 @@ class CompanyController extends Controller
     public function update(Request $request, Company $company)
     {
         $company->update($request->all());
+
+        return redirect()->route('companies.index');
     }
 
     /**
@@ -67,5 +71,7 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         $company->delete();
+
+        return redirect()->route('companies.index');
     }
 }

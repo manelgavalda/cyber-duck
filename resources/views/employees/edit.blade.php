@@ -6,7 +6,7 @@
             <h3 class="card-title">Employee edit</h3>
         </div>
 
-        <form role="form" action="/employees/{{$employee->id}}" method="post">
+        <form role="form" action="{{ route('employees.update', $employee) }}" method="post">
             @csrf
             @method('PUT')
             <div class="card-body">

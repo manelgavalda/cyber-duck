@@ -6,7 +6,7 @@
             <h3 class="card-title">Company edit</h3>
         </div>
 
-        <form role="form" action="/companies/{{$company->id}}" method="post">
+        <form role="form" action="{{ route('companies.update', $company) }}" method="post">
             @csrf
             @method('PUT')
             <div class="card-body">

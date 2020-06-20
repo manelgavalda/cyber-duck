@@ -10,6 +10,20 @@ class EmployeeTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->admin = factory('App\User')->create();
+    }
+
+    /** @test */
+    public function you_need_to_be_authenticated_to_see_employees()
+    {
+        $this->get(route('employees.index'))
+            ->assertRedirect(route('login'));
+    }
+
     /** @test */
     public function employees_are_correctly_shown()
     {
@@ -20,8 +34,9 @@ class EmployeeTest extends TestCase
             'phone' => '699112233'
         ]);
 
-        $this->get('/employees')
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('employees.index'))
+            ->assertOk()
             ->assertSeeInOrder([
                 1,
                 'Manel',
@@ -36,8 +51,9 @@ class EmployeeTest extends TestCase
     {
         $employees = factory('App\Employee', 11)->create();
 
-        $this->get('/employees')
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('employees.index'))
+            ->assertOk()
             ->assertSee($employees->get(9)->email)
             ->assertDontSee($employees->last()->email);
     }
@@ -50,7 +66,9 @@ class EmployeeTest extends TestCase
 
         $this->assertEquals(Employee::count(), 1);
 
-        $this->delete("/employees/{$employee->id}");
+        $this->actingAs($this->admin)
+            ->delete(route('employees.destroy', $employee))
+            ->assertRedirect(route('employees.index'));
 
         $this->assertEquals(Employee::count(), 0);
     }
@@ -58,11 +76,12 @@ class EmployeeTest extends TestCase
     /** @test */
     public function an_employee_can_be_created()
     {
-        $this->post('/employees', [
-            'first_name' => 'Manel',
-            'last_name' => 'Gavaldà',
-            'email' => 'manelgavalda@gmail.com'
-        ]);
+        $this->actingAs($this->admin)
+            ->post(route('employees.index'), [
+                'first_name' => 'Manel',
+                'last_name' => 'Gavaldà',
+                'email' => 'manelgavalda@gmail.com'
+            ])->assertRedirect(route('employees.index'));
 
         $this->assertDatabaseHas('employees', [
             'first_name' => 'Manel',
@@ -79,10 +98,11 @@ class EmployeeTest extends TestCase
             'last_name' => 'Gavaldà'
         ]);
 
-        $this->put("/employees/{$employee->id}", [
-            'first_name' => 'Ramon',
-            'last_name' => 'Zampon'
-        ]);
+        $this->actingAs($this->admin)
+            ->put(route('employees.update', $employee), [
+                'first_name' => 'Ramon',
+                'last_name' => 'Zampon'
+            ])->assertRedirect(route('employees.index'));
 
         tap($employee->fresh(), function($employee) {
             $this->assertEquals($employee->first_name, 'Ramon');
@@ -99,8 +119,9 @@ class EmployeeTest extends TestCase
             'email' => 'manelgavalda1@gmail.com'
         ]);
 
-        $this->get("/employees/{$employee->id}")
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('employees.show', $employee))
+            ->assertOk()
             ->assertSeeInOrder([
                 'Manel',
                 'Gavaldà',
@@ -117,8 +138,9 @@ class EmployeeTest extends TestCase
             'email' => 'manelgavalda1@gmail.com'
         ]);
 
-        $this->get("/employees/{$employee->id}/edit")
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('employees.edit', $employee))
+            ->assertOk()
             ->assertSeeInOrder([
                 'Manel',
                 'Gavaldà',
@@ -129,8 +151,9 @@ class EmployeeTest extends TestCase
     /** @test */
     public function the_employee_creation_form_is_correctly_shown()
     {
-        $this->get("/employees/create")
-            ->assertStatus(200)
+        $this->actingAs($this->admin)
+            ->get(route('employees.create'))
+            ->assertOk()
             ->assertSee('Create Employee');
     }
 }

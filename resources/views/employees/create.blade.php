@@ -6,7 +6,7 @@
             <h3 class="card-title">Create Employee</h3>
         </div>
 
-        <form role="form" action="/employees" method="post">
+        <form role="form" action="{{ route('employees.store') }}" method="post">
             @csrf
             <div class="card-body">
                 <div class="form-group">

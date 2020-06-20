@@ -17,7 +17,7 @@ Auth::routes(['register' => false]);
 
 Route::middleware('auth')->group(function () {
     Route::view('/', 'welcome');
+    Route::resource('employees', 'EmployeeController');
+    Route::resource('companies', 'CompanyController');
 });
 
-Route::resource('employees', 'EmployeeController');
-Route::resource('companies', 'CompanyController');
