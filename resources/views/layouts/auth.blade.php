@@ -21,8 +21,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
-
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fa fa-bars"></i></a>
         <ul class="navbar-nav ml-auto">
             @guest
                 <li class="nav-item">
