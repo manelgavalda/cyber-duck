@@ -45,8 +45,7 @@ class EmployeeController extends Controller
     public function show(Employee $employee)
     {
         return view('employees.show', [
-            'employee' => $employee,
-            'companies' => Company::all()
+            'employee' => $employee
         ]);
     }
 

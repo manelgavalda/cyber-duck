@@ -10,7 +10,7 @@
             @csrf
             <div class="card-body">
                 <div class="form-group">
-                    <label for="first_name">First Name</label>
+                    <label for="first_name">First Name *</label>
                     <input
                         type="text"
                         class="form-control"
@@ -23,7 +23,7 @@
                     <p style="color:red">{{ $message }}</p>
                 @enderror
                 <div class="form-group">
-                    <label for="first_name">Last Name</label>
+                    <label for="first_name">Last Name *</label>
                     <input
                         type="text"
                         class="form-control"
@@ -37,7 +37,7 @@
                 @enderror
 
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Email *</label>
                     <input
                         type="email"
                         class="form-control"

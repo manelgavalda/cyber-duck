@@ -15,8 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register' => false]);
 
+Route::redirect('/', 'employees');
+
 Route::middleware('auth')->group(function () {
-    Route::view('/', 'welcome');
     Route::resource('employees', 'EmployeeController');
     Route::resource('companies', 'CompanyController');
 });

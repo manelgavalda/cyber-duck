@@ -53,6 +53,8 @@ class CompanyTest extends TestCase
     /** @test */
     public function a_company_can_be_shown()
     {
+        $this->withoutExceptionHandling();
+
         $company = factory('App\Company')->create([
             'name' => 'Cyber-Duck',
             'email' => 'cyberduck@gmail.com',

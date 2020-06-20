@@ -34,7 +34,11 @@
                         <td>{{ $employee->last_name }}</td>
                         <td>{{ $employee->email }}</td>
                         <td>{{ $employee->phone }}</td>
-                        <td>{{ optional($employee->company)->name }}</td>
+                        <td>
+                            @if($employee->company()->exists())
+                                <a href="{{ route('companies.show', $employee->company_id) }}">{{ $employee->company->name }}</a>
+                            @endif
+                        </td>
                         <td>
                             <a href="{{ route('employees.show', $employee->id) }}">
                                 <button class="btn btn-inline btn-outline-primary">

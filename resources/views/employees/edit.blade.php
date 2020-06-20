@@ -3,7 +3,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Employee edit</h3>
+            <h3 class="card-title">Edit Employee</h3>
         </div>
 
         <form role="form" action="{{ route('employees.update', $employee) }}" method="post">
@@ -11,7 +11,7 @@
             @method('PUT')
             <div class="card-body">
                 <div class="form-group">
-                    <label for="first_name">First Name</label>
+                    <label for="first_name">First Name *</label>
                     <input
                         type="text"
                         class="form-control"
@@ -25,7 +25,7 @@
                 @enderror
 
                 <div class="form-group">
-                    <label for="first_name">Last Name</label>
+                    <label for="first_name">Last Name *</label>
                     <input
                         type="text"
                         class="form-control"
@@ -39,7 +39,7 @@
                 @enderror
 
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Email *</label>
                     <input
                         type="email"
                         class="form-control"

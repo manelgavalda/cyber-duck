@@ -13,4 +13,8 @@ class Employee extends Model
     public function company() {
         return $this->belongsTo(Company::class);
     }
+
+    public function getFullNameAttribute() {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }

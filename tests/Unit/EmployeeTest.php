@@ -19,4 +19,15 @@ class EmployeeTest extends TestCase
 
         $this->assertTrue($employee->company->is($company));
     }
+
+    /** @test */
+    public function an_employee_has_a_full_name()
+    {
+        $employee = factory('App\Employee')->create([
+            'first_name' => 'Manel',
+            'last_name' => 'Gavaldà'
+        ]);
+
+        $this->assertEquals('Manel Gavaldà', $employee->fullName);
+    }
 }

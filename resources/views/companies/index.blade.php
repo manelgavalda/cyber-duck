@@ -30,7 +30,7 @@
                         <td>{{ $company->id }}</td>
                         <td>{{ $company->name }}</td>
                         <td>{{ $company->email }}</td>
-                        <td>{{ $company->website }}</td>
+                        <td><a href="{{ $company->website }}" target="_blank">{{ $company->website }}</a></td>
                         <td>
                             <a href="{{ route('companies.show', $company->id) }}">
                                 <button class="btn btn-inline btn-outline-primary">
