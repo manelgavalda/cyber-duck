@@ -4,6 +4,13 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Employees</h3>
+            <div class="card-tools">
+                <a href="{{ route('employees.create') }}">
+                    <button type="button" class="btn-lg btn-block btn-outline-primary">
+                        Create Employee
+                    </button>
+                </a>
+            </div>
         </div>
 
         <div class="card-body">
